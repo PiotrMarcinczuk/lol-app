@@ -1,25 +1,44 @@
 "use client";
+import { useState, useRef } from "react";
+import useFetchData from "../customHooks/useFetchData";
+import useData from "../customHooks/useData";
 import styles from "./header.module.css";
-import BubbleChart from "../BubbleChart/BubbleChart";
-const data = [
-  { name: "A", x: 1, y: 1, value: 10000, r: 15 },
-  { name: "B", x: 2, y: 2, value: 20000, r: 15 },
-  { name: "C", x: 3, y: 3, value: 30000, r: 15 },
-  { name: "D", x: 4, y: 4, value: 40000, r: 15 },
-  { name: "E", x: 5, y: 5, value: 50000, r: 15 },
-  { name: "F", x: 6, y: 6, value: 60000, r: 15 },
-  // ...Array.from({ length: 40 }, (_, i) => ({
-  //   name: String.fromCharCode(71 + i), // Starting from 'G'
-  //   x: 7 + i,
-  //   y: 7 + i,
-  //   value: 70000 + 10000 * i,
-  //   r: 15,
-  // })),
-];
+import LoopIconSVG from "../../../../public/search.svg";
 export default function Header() {
+  const searchedNick = useRef("");
+
+  const handleInputChange = (e: any) => {
+    searchedNick.current = e.target.value;
+  };
+
+  const handleClickLoop = () => {
+    console.log(searchedNick);
+    useFetchData(searchedNick.current, "HWDD");
+  };
+
+  const handleKeyDown = (e: any) => {
+    console.log(e.key);
+    if (e.key !== "Enter") return;
+    console.log(searchedNick);
+  };
+
   return (
     <div className={styles.header}>
-      <BubbleChart data={data} />
+      <div className={styles.search_container}>
+        <input
+          type="text"
+          className={styles.search_input}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          placeholder="Enter nickname"
+        ></input>
+        <span
+          onClick={handleClickLoop}
+          className={`${styles.search_icon} material-symbols-outlined`}
+        >
+          search
+        </span>
+      </div>
     </div>
   );
 }

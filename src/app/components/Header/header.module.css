@@ -2,4 +2,34 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #cccccb;
+}
+
+.search_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  width: 20%;
+  height: 0.8em;
+  border-radius: 28px;
+  padding: 15px;
+  margin: 5px;
+  background: #f5f3f3;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.66);
+}
+
+.search_input {
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+.search_input::placeholder,
+.search_icon {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.search_icon:hover {
+  cursor: pointer;
 }
