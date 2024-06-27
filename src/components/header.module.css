@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #cccccb;
+  background-color: var(--bacground-color-header);
 }
 
 .search_container {
@@ -43,6 +43,15 @@
 
 .search_icon:hover {
   cursor: pointer;
+}
+
+.validation {
+  color: red;
+  width: 100%;
+  padding: 3px;
+  font-size: 0.6em;
+  text-align: center;
+  background-color: var(--bacground-color-header);
 }
 
 @media screen and (width <= 285px) {
