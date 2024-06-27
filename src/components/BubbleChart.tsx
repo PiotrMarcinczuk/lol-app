@@ -7,6 +7,7 @@ const championBaseUrl =
   "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons";
 
 export default function BubbleChart({ data }) {
+  const dataLen = data.length;
   const svgRef = useRef(null);
   const width = 800;
   const height = 350;
@@ -34,6 +35,13 @@ export default function BubbleChart({ data }) {
         .attr("height", height)
         .attr("class", styles.svg);
       svg.selectAll("*").remove();
+      svg
+        .append("text")
+        .attr("x", width)
+        .attr("y", height) // Position text below the chart
+        .attr("text-anchor", "middle")
+        .attr("class", styles.chartText)
+        .text("Your text here");
 
       const defs = svg.append("defs");
       data.forEach((d) => {
@@ -71,7 +79,8 @@ export default function BubbleChart({ data }) {
       const drag = d3
         .drag()
         .on("start", (event, d) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
+          if (!event.active)
+            simulation.alphaTarget(dataLen > 10 ? 0.17 : 1.3).restart();
           d.fx = d.x;
           d.fy = d.y;
         })
@@ -100,8 +109,8 @@ export default function BubbleChart({ data }) {
           "collision",
           d3.forceCollide().radius((d) => d.radius)
         )
-        .force("x", d3.forceX(width / 2).strength(0.03)) // Additional force to push towards the center on x-axis
-        .force("y", d3.forceY(height / 2).strength(0.03)) // Additional force to push towards the center on y-axis
+        .force("x", d3.forceX(width / 2).strength(dataLen > 10 ? 0.035 : 0.09)) // Additional force to push towards the center on x-axis
+        .force("y", d3.forceY(height / 2).strength(dataLen > 10 ? 0.035 : 0.09)) // Additional force to push towards the center on y-axis
         .on("tick", ticking);
 
       svg.selectAll("circle").call(drag);
