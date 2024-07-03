@@ -5,13 +5,17 @@ import styles from "./bubble_chart.module.css";
 
 const championBaseUrl =
   "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons";
+interface BubbleChartProps {
+  data: any[];
+  nickname: string;
+  tag: string;
+}
 
-export default function BubbleChart({ data }) {
+export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
   const dataLen = data.length;
   const svgRef = useRef(null);
   const width = 800;
   const height = 350;
-
   const calculateSize = (championPoints: number) => {
     const minPoints = 15000; // Minimum points to consider
     const maxPoints = 2000000; // Maximum points to consider
@@ -35,13 +39,6 @@ export default function BubbleChart({ data }) {
         .attr("height", height)
         .attr("class", styles.svg);
       svg.selectAll("*").remove();
-      svg
-        .append("text")
-        .attr("x", width)
-        .attr("y", height) // Position text below the chart
-        .attr("text-anchor", "middle")
-        .attr("class", styles.chartText)
-        .text("Your text here");
 
       const defs = svg.append("defs");
       data.forEach((d) => {
@@ -60,7 +57,8 @@ export default function BubbleChart({ data }) {
           .attr("height", radius * 2)
           .attr("x", 0)
           .attr("y", 0)
-          .attr("preserveAspectRatio", "xMidYMid slice");
+          .attr("preserveAspectRatio", "xMidYMid slice")
+          .classed(styles.champion_bubble, true);
       });
 
       const ticking = () => {
@@ -119,7 +117,7 @@ export default function BubbleChart({ data }) {
         simulation.stop();
       };
     }, 1000);
-  }, [data]);
+  }, [data, nickname, tag]);
 
   return <svg ref={svgRef}></svg>;
 }

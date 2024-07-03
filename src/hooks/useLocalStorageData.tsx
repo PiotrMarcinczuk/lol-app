@@ -2,6 +2,7 @@ export default function useLocalStorageData() {
   const setData = (response: any) => {
     localStorage.setItem("championMastery", JSON.stringify(response.data));
   };
+
   const getData = () => {
     const result = localStorage.getItem("championMastery");
     if (result) {
@@ -9,8 +10,22 @@ export default function useLocalStorageData() {
     }
     return null;
   };
+
   const removeData = () => {
     localStorage.removeItem("championMastery");
   };
-  return { setData, getData, removeData };
+
+  const setUserInfo = (username: string, tag: string) => {
+    localStorage.setItem("nickname", username);
+    localStorage.setItem("tag", tag);
+  };
+
+  const getUserInfo = () => {
+    let result = [];
+    result.push(localStorage.getItem("nickname"));
+    result.push(localStorage.getItem("tag"));
+    return result;
+  };
+
+  return { setData, getData, setUserInfo, getUserInfo };
 }

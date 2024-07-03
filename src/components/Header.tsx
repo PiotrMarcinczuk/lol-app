@@ -1,40 +1,59 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import useFetchData from "../hooks/useFetchData";
 import styles from "./header.module.css";
+import useLocalStorageData from "@/hooks/useLocalStorageData";
+import { useRouter } from "next/navigation";
 
-export default function Header() {
-  const searchedNick = useRef("");
-  const searchedTag = useRef("");
+interface HeaderProps {
+  initialNickname: string;
+  initialTag: string;
+}
+
+export default function Header({ initialNickname, initialTag }: HeaderProps) {
+  const [searchedNick, setSearchedNick] = useState("");
+  const [searchedTag, setSearchedTag] = useState("");
+  const { push } = useRouter();
   const [region, setRegion] = useState("EUNE");
   const [validating, setValidating] = useState(false);
   const { fetchAccessData, userData, fetchChampionMastery } = useFetchData();
+
   const { nickname, tag, puuid } = userData;
 
   useEffect(() => {
     if (!nickname || !tag || !puuid) return;
     fetchChampionMastery(puuid, region);
-    // router.push({
-    //   pathname: `/${nickname}/${tag}`,
-    //   query: { nickname: nickname, tag: tag },
-    // });
+    push(`/${nickname}/${tag}`);
   }, [nickname, tag, puuid, region]);
 
+  useEffect(() => {
+    if (initialNickname && initialTag) {
+      fetchAccessData(initialNickname, initialTag, setValidating);
+      return;
+    }
+  }, [initialNickname, initialTag]);
+
   const handleNicknameInputChange = (e: any) => {
-    searchedNick.current = e.target.value;
+    setSearchedNick(e.target.value);
   };
 
   const handleTagInputChange = (e: any) => {
-    searchedTag.current = e.target.value;
+    setSearchedTag(e.target.value);
   };
 
   const handleClickLoop = () => {
-    fetchAccessData(searchedNick.current, searchedTag.current, setValidating);
+    fetchAccessData(searchedNick, searchedTag, setValidating);
+    push(`/${searchedNick}/${searchedTag}`);
+    setSearchedNick("");
+    setSearchedTag("");
   };
 
   const handleKeyDown = (e: any) => {
     if (e.key !== "Enter") return;
-    fetchAccessData(searchedNick.current, searchedTag.current, setValidating);
+    fetchAccessData(searchedNick, searchedTag, setValidating);
+    setSearchedNick("");
+    setSearchedTag("");
+    push(`/${searchedNick}/${searchedTag}`);
   };
 
   const handleChangeSelectInput = (e: any) => {
@@ -51,6 +70,7 @@ export default function Header() {
             onChange={handleNicknameInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Enter nickname"
+            value={searchedNick}
           ></input>
           <input
             type="text"
@@ -58,6 +78,7 @@ export default function Header() {
             onChange={handleTagInputChange}
             onKeyDown={handleKeyDown}
             placeholder="#tag"
+            value={searchedTag}
           ></input>
           <span
             onClick={handleClickLoop}
@@ -66,10 +87,22 @@ export default function Header() {
             search
           </span>
         </div>
-        <select onChange={handleChangeSelectInput} defaultValue={region}>
+        <select
+          className={styles.select_region}
+          onChange={handleChangeSelectInput}
+          defaultValue={region}
+        >
           <option value="EUNE">EUNE</option>
           <option value="EUW">EUW</option>
         </select>
+
+        {nickname && tag && (
+          <div className={styles.user_info}>
+            <span>{nickname}</span>
+            <br></br>
+            <span className={styles.user_tag}>{` #${tag}`}</span>
+          </div>
+        )}
       </div>
       {validating && (
         <span className={styles.validation}>

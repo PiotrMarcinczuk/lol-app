@@ -1,7 +1,7 @@
-.circle {
-  cursor: pointer;
+.svg {
+  background-color: #0f2852;
 }
 
-.svg {
-  background-color: #877777;
+.champion_bubble {
+  border: 10px solid red;
 }

@@ -1,4 +1,3 @@
-"use client";
 import axios from "axios";
 import useLocalStorageData from "./useLocalStorageData";
 import { http } from "../app/config";
@@ -7,8 +6,8 @@ import { useRouter } from "next/navigation";
 export default function useFetchData() {
   const router = useRouter();
   const [userData, setUserData] = useState({
-    nickname: "",
-    tag: "",
+    nickname: localStorage.getItem("nickname") || "",
+    tag: localStorage.getItem("tag") || "",
     puuid: "",
   });
   const { setData } = useLocalStorageData();

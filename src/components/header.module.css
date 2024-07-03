@@ -11,7 +11,7 @@
   justify-content: space-between;
   align-items: center;
   border: none;
-  width: 18rem;
+  width: 16rem;
   height: 0.8em;
   border-radius: 28px;
   padding: 10px 10px 10px 20px;
@@ -45,6 +45,14 @@
   cursor: pointer;
 }
 
+.user_info {
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: center;
+  padding: 3px 3px 0 0;
+}
+
 .validation {
   color: red;
   width: 100%;
@@ -54,8 +62,12 @@
   background-color: var(--bacground-color-header);
 }
 
-@media screen and (width <= 285px) {
-  .search_container {
-    width: 10rem;
+.select_region {
+  outline: none;
+}
+
+@media screen and (width <= 450px) {
+  .user_info {
+    display: none;
   }
 }

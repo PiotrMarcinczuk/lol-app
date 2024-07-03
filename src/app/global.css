@@ -15,3 +15,30 @@ body {
   background-color: #877777;
   overflow-x: hidden;
 }
+
+.link_section {
+  padding: 3px;
+}
+footer {
+  width: 100%;
+  font-size: 0.3em;
+  display: flex;
+  background-color: var(--bacground-color-header);
+}
+
+.home_content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 95%;
+}
+
+main {
+  height: 19rem; /* 19rem home content*/
+}
+
+footer img:hover {
+  cursor: pointer;
+}
