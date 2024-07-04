@@ -1,5 +1,6 @@
 export default function useLocalStorageData() {
   const setData = (response: any) => {
+    console.log("set data");
     localStorage.setItem("championMastery", JSON.stringify(response.data));
   };
 
@@ -27,5 +28,5 @@ export default function useLocalStorageData() {
     return result;
   };
 
-  return { setData, getData, setUserInfo, getUserInfo };
+  return { setData, getData, setUserInfo, getUserInfo, removeData };
 }

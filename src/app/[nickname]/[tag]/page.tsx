@@ -2,6 +2,7 @@
 import Header from "@/components/Header";
 import BubbleChart from "@/components/BubbleChart";
 import useLocalStorageData from "@/hooks/useLocalStorageData";
+import useFetchData from "@/hooks/useFetchData";
 import { useEffect, useState } from "react";
 interface MainContentProps {
   params: {
@@ -13,22 +14,37 @@ interface MainContentProps {
 export default function MainContent({ params }: MainContentProps) {
   const { getData } = useLocalStorageData();
   const [valuableChampions, setValuableChampions] = useState([]);
+  const [errorDuringFetch, setErrorDuringFetch] = useState(false);
   useEffect(() => {
     const championsMastery = getData();
-    const filteredMastery = championsMastery
-      .filter((el: any) => el.championPoints >= 30000)
-      .map((el: any) => el);
-    setValuableChampions(filteredMastery);
+    if (!championsMastery) {
+      setErrorDuringFetch(true);
+    } else {
+      setErrorDuringFetch(false);
+      const filteredMastery = championsMastery
+        .filter((el: any) => el.championPoints >= 15000)
+        .map((el: any) => el);
+      setValuableChampions(filteredMastery);
+    }
   }, [params]);
 
   return (
     <>
       <Header initialNickname={params.nickname} initialTag={params.tag} />
-      <BubbleChart
-        data={valuableChampions}
-        nickname={params.nickname}
-        tag={params.tag}
-      />
+      {errorDuringFetch ? (
+        <>
+          <p>ERROR</p>
+          <span>
+            Couldn't find summoner "{params.nickname}" and tag #{params.tag}
+          </span>
+        </>
+      ) : (
+        <BubbleChart
+          data={valuableChampions}
+          nickname={params.nickname}
+          tag={params.tag}
+        />
+      )}
     </>
   );
 }

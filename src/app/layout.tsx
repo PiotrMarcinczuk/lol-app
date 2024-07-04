@@ -24,55 +24,15 @@ export default function RootLayout({
       </head>
       <body>
         {children}
-        <main>
-          <section className="link_section">
-            <a href="https://www.riotgames.com/pl">
-              <Image
-                src="/riot_logo.png"
-                alt="Riot Games Logo"
-                width={70}
-                height={24}
-              ></Image>
-            </a>
-            <a href="https://www.riotgames.com/pl">
-              <Image
-                src="http://www.w3.org/2000/svg"
-                alt="Leauge of Legends logo"
-                width={70}
-                height={24}
-              ></Image>
-            </a>
-            <a href="https://www.riotgames.com/pl">
-              <Image src="" alt="Valorant logo" width={70} height={24}></Image>
-            </a>
-            <a href="https://www.riotgames.com/pl">
-              <Image src="" alt="Wilt rift logo" width={70} height={24}></Image>
-            </a>
-            <a href="https://www.riotgames.com/pl">
-              <Image
-                src=""
-                alt="Leauge of Runeterra logo"
-                width={70}
-                height={24}
-              ></Image>
-            </a>
-          </section>
-          <span>
-            Welcome to SznyCLOL it's interactive visualization tool designed for
-            League of Legends enthusiasts. Leveraging the powerful Riot API, our
-            site dynamically generates bubble charts that showcase your champion
-            mastery levels, providing a clear and engaging way to display your
-            in-game achievements.
-          </span>
-        </main>
+
         <footer>
           <p>
             <a href="https://github.com/PiotrMarcinczuk">
               <Image
                 src="/github-mark.png"
                 alt="GitHub Logo"
-                width={24}
-                height={24}
+                width={20}
+                height={20}
               />
             </a>
           </p>

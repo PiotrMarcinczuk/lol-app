@@ -16,18 +16,25 @@ export default function Header({ initialNickname, initialTag }: HeaderProps) {
   const { push } = useRouter();
   const [region, setRegion] = useState("EUNE");
   const [validating, setValidating] = useState(false);
+  const { removeData } = useLocalStorageData();
   const { fetchAccessData, userData, fetchChampionMastery } = useFetchData();
 
   const { nickname, tag, puuid } = userData;
 
   useEffect(() => {
-    if (!nickname || !tag || !puuid) return;
+    removeData();
+    if (!nickname || !tag || !puuid) {
+      return;
+    }
+    console.log(11);
     fetchChampionMastery(puuid, region);
     push(`/${nickname}/${tag}`);
-  }, [nickname, tag, puuid, region]);
+  }, [nickname, tag, puuid]);
 
   useEffect(() => {
+    console.log(2);
     if (initialNickname && initialTag) {
+      console.log(22);
       fetchAccessData(initialNickname, initialTag, setValidating);
       return;
     }

@@ -1,5 +1,6 @@
 .svg {
-  background-color: #0f2852;
+  background-size: cover;
+  background-image: url("https://i.pinimg.com/originals/3f/93/9a/3f939af4dda1ec2988b9c6ce3bdb3886.jpg");
 }
 
 .champion_bubble {
