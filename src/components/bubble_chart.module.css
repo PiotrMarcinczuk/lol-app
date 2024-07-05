@@ -6,3 +6,30 @@
 .champion_bubble {
   border: 10px solid red;
 }
+
+.button_section {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.button_section button {
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  outline: none;
+}
+
+.explode_on {
+  background-color: red;
+}
+
+.explode_off {
+  background-color: green;
+}

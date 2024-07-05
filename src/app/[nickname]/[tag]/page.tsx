@@ -35,7 +35,8 @@ export default function MainContent({ params }: MainContentProps) {
         <>
           <p>ERROR</p>
           <span>
-            Couldn't find summoner "{params.nickname}" and tag #{params.tag}
+            Couldn't find summoner "{params.nickname.split("%20").join(" ")}"
+            and tag #{params.tag}
           </span>
         </>
       ) : (

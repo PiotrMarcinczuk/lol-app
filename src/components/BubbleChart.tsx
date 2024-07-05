@@ -1,10 +1,10 @@
-"use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import styles from "./bubble_chart.module.css";
 
 const championBaseUrl =
   "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons";
+
 interface BubbleChartProps {
   data: any[];
   nickname: string;
@@ -18,10 +18,13 @@ interface CustomSimulationNodeDatum extends d3.SimulationNodeDatum {
 }
 
 export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [explodeFlag, setExplodeFlag] = useState(false);
   const dataLen = data.length;
-  const svgRef = useRef(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
   const width = 800;
   const height = 380;
+
   const calculateSize = (championPoints: number) => {
     const minPoints = 15000; // Minimum points to consider
     const maxPoints = 2000000; // Maximum points to consider
@@ -123,10 +126,64 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       .selectAll<SVGCircleElement, CustomSimulationNodeDatum>("circle")
       .call(drag);
 
+    const explode = (clickX: number, clickY: number) => {
+      const explosionStrength = 50;
+
+      simulation.force(
+        "explode",
+        d3.forceManyBody().strength((d) => {
+          const dx = d.x! - clickX;
+          const dy = d.y! - clickY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const force = explosionStrength / (distance + 1); // Prevent division by zero
+          d.vx! += force * dx;
+          d.vy! += force * dy;
+          return force;
+        })
+      );
+      simulation.alpha(0.5).restart();
+
+      setTimeout(() => {
+        simulation.force("explode", null); // Remove the explosion force after some time
+      }, 1000);
+    };
+
+    const handleExplosion = () => {
+      setExplodeFlag((prev) => !prev);
+    };
+
+    if (buttonRef.current) {
+      buttonRef.current.addEventListener("click", handleExplosion);
+    }
+
+    if (explodeFlag) {
+      svg.on("click", (event) => {
+        const [clickX, clickY] = d3.pointer(event);
+        explode(clickX, clickY);
+      });
+    } else {
+      svg.on("click", null);
+    }
+
     return () => {
+      if (buttonRef.current) {
+        buttonRef.current.removeEventListener("click", handleExplosion);
+      }
       simulation.stop();
     };
-  }, [data, nickname, tag]);
+  }, [data, nickname, tag, explodeFlag]);
 
-  return <svg ref={svgRef}></svg>;
+  return (
+    <div className={styles.chart_container}>
+      <svg ref={svgRef}></svg>
+      <div className={styles.button_section}>
+        <button
+          className={explodeFlag ? styles.explode_on : styles.explode_off}
+          ref={buttonRef}
+        >
+          Explode MODE
+        </button>
+      </div>
+    </div>
+  );
 }

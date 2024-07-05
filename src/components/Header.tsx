@@ -20,21 +20,22 @@ export default function Header({ initialNickname, initialTag }: HeaderProps) {
   const { fetchAccessData, userData, fetchChampionMastery } = useFetchData();
 
   const { nickname, tag, puuid } = userData;
+  console.log(nickname);
 
   useEffect(() => {
+    console.log("useEffect1");
     removeData();
     if (!nickname || !tag || !puuid) {
       return;
     }
-    console.log(11);
+
     fetchChampionMastery(puuid, region);
     push(`/${nickname}/${tag}`);
   }, [nickname, tag, puuid]);
 
   useEffect(() => {
-    console.log(2);
+    console.log("useEffect2");
     if (initialNickname && initialTag) {
-      console.log(22);
       fetchAccessData(initialNickname, initialTag, setValidating);
       return;
     }
