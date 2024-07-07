@@ -44,6 +44,7 @@ export default function useFetchData() {
       })
       .then((response) => {
         router.refresh();
+        console.log(response.data);
         setData(response);
       })
       .catch((error) => {

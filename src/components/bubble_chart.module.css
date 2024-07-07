@@ -9,24 +9,49 @@
 
 .button_section {
   position: absolute;
-  bottom: 10px;
+  width: 100%;
+  bottom: 1.8em;
+  display: flex;
+  justify-content: space-around;
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
-  padding: 10px;
+  margin-bottom: 3px 3px 15px 3px;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .button_section button {
   color: white;
   border: none;
   padding: 10px 20px;
+  margin: 5px 0 5px 0;
   cursor: pointer;
   outline: none;
 }
 
+.click_button {
+  background-color: green;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px 0 5px 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.click_button:hover {
+  background-color: #049106;
+  -webkit-box-shadow: 10px 11px 29px -10px rgba(66, 68, 90, 1);
+  -moz-box-shadow: 10px 11px 29px -10px rgba(66, 68, 90, 1);
+  box-shadow: 10px 11px 29px -10px rgba(66, 68, 90, 1);
+}
+
 .explode_on {
+  background-color: rgb(222, 36, 36);
+}
+
+.explode_on:hover {
   background-color: red;
 }
 

@@ -18,7 +18,8 @@ interface CustomSimulationNodeDatum extends d3.SimulationNodeDatum {
 }
 
 export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const explodeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const fightButtonRef = useRef<HTMLButtonElement | null>(null);
   const [explodeFlag, setExplodeFlag] = useState(false);
   const dataLen = data.length;
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -148,12 +149,30 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       }, 1000);
     };
 
+    const pullToCenter = () => {
+      simulation
+        .force(
+          "x",
+          d3.forceX(width / 2).strength(0.5) // Adjust strength as needed
+        )
+        .force(
+          "y",
+          d3.forceY(height / 2).strength(0.5) // Adjust strength as needed
+        )
+        .alpha(1)
+        .restart();
+    };
+
     const handleExplosion = () => {
       setExplodeFlag((prev) => !prev);
     };
 
-    if (buttonRef.current) {
-      buttonRef.current.addEventListener("click", handleExplosion);
+    const handleFight = () => {
+      pullToCenter();
+    };
+
+    if (explodeButtonRef.current) {
+      explodeButtonRef.current.addEventListener("click", handleExplosion);
     }
 
     if (explodeFlag) {
@@ -165,9 +184,16 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       svg.on("click", null);
     }
 
+    if (fightButtonRef.current) {
+      fightButtonRef.current.addEventListener("click", handleFight);
+    }
+
     return () => {
-      if (buttonRef.current) {
-        buttonRef.current.removeEventListener("click", handleExplosion);
+      if (explodeButtonRef.current) {
+        explodeButtonRef.current.removeEventListener("click", handleExplosion);
+      }
+      if (fightButtonRef.current) {
+        fightButtonRef.current.removeEventListener("click", handleFight);
       }
       simulation.stop();
     };
@@ -178,10 +204,16 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       <svg ref={svgRef}></svg>
       <div className={styles.button_section}>
         <button
-          className={explodeFlag ? styles.explode_on : styles.explode_off}
-          ref={buttonRef}
+          className={`
+            ${styles.click_button} ${
+            explodeFlag ? styles.explode_on : styles.explode_off
+          }`}
+          ref={explodeButtonRef}
         >
           Explode MODE
+        </button>
+        <button className={styles.click_button} ref={fightButtonRef}>
+          Fight Button
         </button>
       </div>
     </div>
