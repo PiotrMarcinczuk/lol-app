@@ -161,6 +161,19 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
         )
         .alpha(1)
         .restart();
+      setTimeout(() => {
+        console.log("Simulation stopped");
+        simulation
+          .force(
+            "x",
+            d3.forceX(width / 2).strength(dataLen > 10 ? 0.035 : 0.09)
+          )
+          .force(
+            "y",
+            d3.forceY(height / 2).strength(dataLen > 10 ? 0.035 : 0.09)
+          )
+          .alphaTarget(0.2);
+      }, 1000);
     };
 
     const handleExplosion = () => {

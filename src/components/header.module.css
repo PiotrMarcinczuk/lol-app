@@ -53,6 +53,7 @@
   right: 0;
   top: 0;
   text-align: center;
+  font-weight: bold;
   padding: 3px 3px 0 0;
 }
 
@@ -67,6 +68,22 @@
 
 .select_region {
   outline: none;
+  cursor: pointer;
+  border: 1px solid #d0d2d6;
+  border-radius: 5px;
+  user-select: none;
+  background-color: #f6f1f1;
+  -webkit-box-shadow: 2px 5px 26px -4px rgba(66, 68, 90, 1);
+  -moz-box-shadow: 2px 5px 26px -4px rgba(66, 68, 90, 1);
+  box-shadow: 2px 5px 26px -4px rgba(66, 68, 90, 1);
+}
+
+.select_region option {
+  background-color: #f5f5f5; /* Background color */
+  color: #333; /* Text color */
+  font-size: 0.7em;
+  padding: 3px; /* Padding around text */
+  border-bottom: 1px solid #ddd; /* Bottom border for each option */
 }
 
 @media screen and (width <= 450px) {
