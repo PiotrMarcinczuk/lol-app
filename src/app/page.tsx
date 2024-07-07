@@ -30,6 +30,25 @@ export default function Home() {
               height={50}
             ></Image>
           </a>
+          <a href="https://nextjs.org/">
+            <Image
+              src="/next_logo.png"
+              alt="Next.js"
+              width={50}
+              height={50}
+            ></Image>
+          </a>
+          <a href="https://d3js.org/">
+            <Image src="/d3_logo.png" alt="d3" width={50} height={50}></Image>
+          </a>
+          <a href="https://nodejs.org/en">
+            <Image
+              src="/node-js_logo.png"
+              alt="Node.js"
+              width={50}
+              height={50}
+            ></Image>
+          </a>
         </section>
       </main>
     </>

@@ -209,6 +209,7 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
         fightButtonRef.current.removeEventListener("click", handleFight);
       }
       simulation.stop();
+      svg.selectAll("*").remove();
     };
   }, [data, nickname, tag, explodeFlag]);
 
