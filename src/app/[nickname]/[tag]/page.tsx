@@ -1,21 +1,52 @@
 "use client";
-import Header from "@/app/components/Header/Header";
-import BubbleChart from "@/app/components/BubbleChart/BubbleChart";
-import useLocalStorageData from "@/app/components/customHooks/useLocalStorageData";
-import { useEffect } from "react";
-export default function MainContent() {
-  const { getData } = useLocalStorageData();
-  let valuableChampions;
+import Header from "@/components/Header";
+import BubbleChart from "@/components/BubbleChart";
+import useLocalStorageData from "@/hooks/useLocalStorageData";
+import useFetchData from "@/hooks/useFetchData";
+import { useEffect, useState } from "react";
+interface MainContentProps {
+  params: {
+    nickname: string;
+    tag: string;
+  };
+}
 
-  const championsMastery = getData();
-
-  valuableChampions = championsMastery
-    .filter((el: any) => el.championPoints >= 20000)
-    .map((el: any) => el);
+export default function MainContent({ params }: MainContentProps) {
+  const { getData, removeData } = useLocalStorageData();
+  const [valuableChampions, setValuableChampions] = useState([]);
+  const [errorDuringFetch, setErrorDuringFetch] = useState(false);
+  useEffect(() => {
+    const championsMastery = getData();
+    console.log(championsMastery);
+    if (!championsMastery) {
+      setErrorDuringFetch(true);
+    } else {
+      setErrorDuringFetch(false);
+      const filteredMastery = championsMastery
+        .filter((el: any) => el.championPoints >= 12000)
+        .map((el: any) => el);
+      setValuableChampions(filteredMastery);
+    }
+  }, [params]);
 
   return (
     <>
-      <Header /> <BubbleChart data={valuableChampions} />
+      <Header initialNickname={params.nickname} initialTag={params.tag} />
+      {errorDuringFetch ? (
+        <>
+          <p>ERROR</p>
+          <span>
+            Couldn't find summoner "{params.nickname.split("%20").join(" ")}"
+            and tag #{params.tag}
+          </span>
+        </>
+      ) : (
+        <BubbleChart
+          data={valuableChampions}
+          nickname={params.nickname}
+          tag={params.tag}
+        />
+      )}
     </>
   );
 }

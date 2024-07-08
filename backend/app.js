@@ -36,10 +36,14 @@ app.post("/getPuuid", async (req, res) => {
 });
 
 app.post("/getChampionMastery", async (req, res) => {
-  const { puuid } = req.body;
+  const { puuid, region } = req.body;
+  let tempRegion = region;
+  if (region === "EUNE") tempRegion = "eun1";
+  if (region === "EUW") tempRegion = "euw1";
+
   try {
     const response = await http.get(
-      `https://eun1.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}`
+      `https://${tempRegion}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/${puuid}`
     );
     res.json(response.data);
   } catch (e) {
