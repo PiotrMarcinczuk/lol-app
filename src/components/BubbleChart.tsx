@@ -15,6 +15,7 @@ interface CustomSimulationNodeDatum extends d3.SimulationNodeDatum {
   championId: number;
   championPoints: number;
   radius: number;
+  showText: boolean;
 }
 
 export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
@@ -39,6 +40,23 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       .range([minRadius, maxRadius]);
 
     return sizeScale(championPoints);
+  };
+
+  const calculateFontSize = (radius: number) => {
+    const minFontSize = 2; // Minimum font size
+    const maxFontSize = 20; // Maximum font size
+
+    // Create a linear scale for font size
+    const fontSizeScale = d3
+      .scaleLinear()
+      .domain([5, 40])
+      .range([minFontSize, maxFontSize]);
+
+    return `${fontSizeScale(radius)}px`;
+  };
+
+  const convertNumber = (number: number) => {
+    return number.toLocaleString("en-US");
   };
 
   useEffect(() => {
@@ -66,8 +84,8 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
         .attr("height", radius * 2)
         .attr("x", 0)
         .attr("y", 0)
-        .attr("preserveAspectRatio", "xMidYMid slice")
-        .classed(styles.champion_bubble, true);
+        .classed(styles.champions_circle, true)
+        .attr("preserveAspectRatio", "xMidYMid slice");
     });
 
     const ticking = () => {
@@ -78,9 +96,31 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
         .attr("r", (d) => d.radius) // Use the pre-calculated radius
         .attr("cx", (d) => d.x!)
         .attr("cy", (d) => d.y!)
-        .attr("fill", (d) => `url(#pattern${d.championId})`)
-        .attr("class", styles.circle)
-        .call(drag);
+        .attr("cursor", "pointer")
+        .attr("fill", (d) =>
+          d.showText ? "white" : `url(#pattern${d.championId})`
+        )
+        .attr("style", "stroke: #41c6f2")
+        .call(drag)
+        .on("click", (event, d) => {
+          if (explodeFlag) return;
+          d.showText = !d.showText; // Toggle the showText property
+          d3.select(event.target).attr(
+            "fill",
+            d.showText ? "white" : `url(#pattern${d.championId})`
+          );
+        });
+      svg
+        .selectAll("text")
+        .data(simulationData)
+        .join("text")
+        .attr("x", (d) => d.x!)
+        .attr("y", (d) => d.y!)
+        .attr("dy", ".3em")
+        .attr("font-size", (d) => calculateFontSize(d.radius))
+        .attr("font-weight", "bold")
+        .attr("text-anchor", "middle")
+        .text((d) => (d.showText ? convertNumber(d.championPoints) : ""));
     };
 
     const drag = d3
@@ -108,6 +148,7 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       radius: calculateSize(d.championPoints), // Calculate radius based on champion points
       x: width / 2,
       y: height / 2,
+      showText: false,
     }));
 
     const simulation = d3
@@ -219,9 +260,7 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       <div className={styles.button_section}>
         <button
           className={`
-            ${styles.click_button} ${
-            explodeFlag ? styles.explode_on : styles.explode_off
-          }`}
+            ${styles.click_button} ${explodeFlag ? styles.on : styles.off}`}
           ref={explodeButtonRef}
         >
           Explode MODE

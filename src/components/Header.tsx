@@ -108,7 +108,7 @@ export default function Header({ initialNickname, initialTag }: HeaderProps) {
           <div className={styles.user_info}>
             <span>{nickname}</span>
             <br></br>
-            <span className={styles.user_tag}>{` #${tag}`}</span>
+            <span className={styles.user_tag}>{` #${tag.toUpperCase()}`}</span>
           </div>
         )}
       </div>
