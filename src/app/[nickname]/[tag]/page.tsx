@@ -12,17 +12,18 @@ interface MainContentProps {
 }
 
 export default function MainContent({ params }: MainContentProps) {
-  const { getData } = useLocalStorageData();
+  const { getData, removeData } = useLocalStorageData();
   const [valuableChampions, setValuableChampions] = useState([]);
   const [errorDuringFetch, setErrorDuringFetch] = useState(false);
   useEffect(() => {
     const championsMastery = getData();
+    console.log(championsMastery);
     if (!championsMastery) {
       setErrorDuringFetch(true);
     } else {
       setErrorDuringFetch(false);
       const filteredMastery = championsMastery
-        .filter((el: any) => el.championPoints >= 15000)
+        .filter((el: any) => el.championPoints >= 12000)
         .map((el: any) => el);
       setValuableChampions(filteredMastery);
     }

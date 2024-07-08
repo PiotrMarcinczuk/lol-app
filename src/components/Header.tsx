@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import useFetchData from "../hooks/useFetchData";
 import styles from "./header.module.css";
 import useLocalStorageData from "@/hooks/useLocalStorageData";
@@ -14,27 +16,28 @@ export default function Header({ initialNickname, initialTag }: HeaderProps) {
   const [searchedNick, setSearchedNick] = useState("");
   const [searchedTag, setSearchedTag] = useState("");
   const { push } = useRouter();
-  const [region, setRegion] = useState("EUNE");
+  const [region, setRegion] = useState(() => {
+    return localStorage.getItem("region") || "EUNE";
+  });
   const [validating, setValidating] = useState(false);
   const { removeData } = useLocalStorageData();
   const { fetchAccessData, userData, fetchChampionMastery } = useFetchData();
 
   const { nickname, tag, puuid } = userData;
-  console.log(nickname);
 
   useEffect(() => {
-    console.log("useEffect1");
     removeData();
     if (!nickname || !tag || !puuid) {
       return;
     }
 
     fetchChampionMastery(puuid, region);
+    console.log(nickname);
+    console.log(region);
     push(`/${nickname}/${tag}`);
   }, [nickname, tag, puuid]);
 
   useEffect(() => {
-    console.log("useEffect2");
     if (initialNickname && initialTag) {
       fetchAccessData(initialNickname, initialTag, setValidating);
       return;
@@ -66,10 +69,21 @@ export default function Header({ initialNickname, initialTag }: HeaderProps) {
 
   const handleChangeSelectInput = (e: any) => {
     setRegion(e.target.value);
+    localStorage.setItem("region", e.target.value);
   };
 
   return (
     <>
+      <Link href="/">
+        <Image
+          src={"/SznycLOL_logo.png"}
+          alt="logo SznycLOL"
+          className={styles.logo}
+          width={54}
+          height={54}
+        />
+      </Link>
+
       <div className={styles.header}>
         <div className={styles.search_container}>
           <input

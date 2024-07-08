@@ -30,8 +30,8 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
   const height = 380;
 
   const calculateSize = (championPoints: number) => {
-    const minPoints = 15000; // Minimum points to consider
-    const maxPoints = 2000000; // Maximum points to consider
+    const minPoints = 12000; // Minimum points to consider
+    const maxPoints = 5000000; // Maximum points to consider
     const minRadius = 5; // Minimum bubble radius
     const maxRadius = 40; // Maximum bubble radius
 
@@ -246,9 +246,9 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
         .force("y", null)
         .force(
           "sort",
-          d3.forceX((d, i) => (i + 1) * (width / value)).strength(1)
+          d3.forceX((d, i) => (i + 1) * (width / value)).strength(0.8)
         )
-        .force("centerY", d3.forceY(height / 2).strength(1))
+        .force("centerY", d3.forceY(height / 2).strength(0.5))
         .alpha(1)
         .restart();
     };

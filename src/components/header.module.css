@@ -9,6 +9,13 @@
   background-color: var(--bacground-color-header);
 }
 
+.logo {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+
 .search_container {
   display: flex;
   justify-content: space-between;
@@ -88,6 +95,10 @@
 
 @media screen and (width <= 450px) {
   .user_info {
+    display: none;
+  }
+
+  .logo {
     display: none;
   }
 }
