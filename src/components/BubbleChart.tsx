@@ -21,6 +21,8 @@ interface CustomSimulationNodeDatum extends d3.SimulationNodeDatum {
 export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
   const explodeButtonRef = useRef<HTMLButtonElement | null>(null);
   const fightButtonRef = useRef<HTMLButtonElement | null>(null);
+  const randomMoveButtonRef = useRef<HTMLButtonElement | null>(null);
+  const sortButtonRef = useRef<HTMLButtonElement | null>(null);
   const [explodeFlag, setExplodeFlag] = useState(false);
   const dataLen = data.length;
   const svgRef = useRef<SVGSVGElement | null>(null);
@@ -84,7 +86,6 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
         .attr("height", radius * 2)
         .attr("x", 0)
         .attr("y", 0)
-        .classed(styles.champions_circle, true)
         .attr("preserveAspectRatio", "xMidYMid slice");
     });
 
@@ -217,12 +218,55 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       }, 1000);
     };
 
+    const randomMove = () => {
+      const randomStrength = 0.15;
+      simulation
+        .force(
+          "randomX",
+          d3.forceX().strength(() => (Math.random() - 0.5) * randomStrength)
+        )
+        .force(
+          "randomY",
+          d3.forceY().strength(() => (Math.random() - 0.3) * randomStrength)
+        )
+        .alpha(0.5)
+        .restart();
+
+      setTimeout(() => {
+        simulation.force("randomX", null).force("randomY", null);
+      }, 2000);
+    };
+
+    const sort = () => {
+      let value = 100;
+      if (dataLen > 90) value = 150;
+      if (dataLen > 150) value = 200;
+      simulation
+        .force("x", null)
+        .force("y", null)
+        .force(
+          "sort",
+          d3.forceX((d, i) => (i + 1) * (width / value)).strength(1)
+        )
+        .force("centerY", d3.forceY(height / 2).strength(1))
+        .alpha(1)
+        .restart();
+    };
+
     const handleExplosion = () => {
       setExplodeFlag((prev) => !prev);
     };
 
     const handleFight = () => {
       pullToCenter();
+    };
+
+    const handleRandomMove = () => {
+      randomMove();
+    };
+
+    const handleSort = () => {
+      sort();
     };
 
     if (explodeButtonRef.current) {
@@ -242,12 +286,29 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       fightButtonRef.current.addEventListener("click", handleFight);
     }
 
+    if (randomMoveButtonRef.current) {
+      randomMoveButtonRef.current.addEventListener("click", handleRandomMove);
+    }
+
+    if (sortButtonRef.current) {
+      sortButtonRef.current.addEventListener("click", handleSort);
+    }
+
     return () => {
       if (explodeButtonRef.current) {
         explodeButtonRef.current.removeEventListener("click", handleExplosion);
       }
       if (fightButtonRef.current) {
         fightButtonRef.current.removeEventListener("click", handleFight);
+      }
+      if (randomMoveButtonRef.current) {
+        randomMoveButtonRef.current.removeEventListener(
+          "click",
+          handleRandomMove
+        );
+      }
+      if (sortButtonRef.current) {
+        sortButtonRef.current.removeEventListener("click", handleSort);
       }
       simulation.stop();
       svg.selectAll("*").remove();
@@ -264,6 +325,12 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
           ref={explodeButtonRef}
         >
           Explode MODE
+        </button>
+        <button className={styles.click_button} ref={randomMoveButtonRef}>
+          Dispersion Button
+        </button>
+        <button className={styles.click_button} ref={sortButtonRef}>
+          Sort Button
         </button>
         <button className={styles.click_button} ref={fightButtonRef}>
           Fight Button
