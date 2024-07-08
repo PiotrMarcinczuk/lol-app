@@ -69,6 +69,20 @@ export default function BubbleChart({ data, nickname, tag }: BubbleChartProps) {
       .attr("class", styles.svg);
     svg.selectAll("*").remove();
 
+    if (dataLen === 0) {
+      svg
+        .append("text")
+        .attr("x", width / 2)
+        .attr("y", height / 2)
+        .attr("text-anchor", "middle")
+        .attr("font-size", "20px")
+        .attr("font-weight", "bold")
+        .text(
+          "When you see this message, probably you have no champions with 12000+ points."
+        );
+      return;
+    }
+
     const defs = svg.append("defs");
     data.forEach((d) => {
       const radius = calculateSize(d.championPoints); // Calculate radius based on champion points
